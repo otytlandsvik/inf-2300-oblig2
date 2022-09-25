@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import Card from "./Card.js";
 
 function TodoList(props) {
+    /* Todo item count */
     const [count, setCount] = useState(4);
+    /* Input text for new card */
+    const [input, setInput] = useState();
+    /* List of cards */
     const [cards, setCards] = useState(() => {
         return [
             { id: 0, text: "Do the dishes" },
@@ -10,6 +14,11 @@ function TodoList(props) {
             { id: 2, text: "Watch south park" },
         ];
     });
+
+    /* Update the input useState */
+    function updateInput() {
+        setInput(event.target.value);
+    }
 
     /* Add card on button click */
     function addCard() {
@@ -28,6 +37,8 @@ function TodoList(props) {
     return (
         <div>
             <span>Pending todos: {count}</span>
+            <br></br>
+            <input type="text" onChange={updateInput}></input>
             <button onClick={addCard}>Add</button>
             {cards.map((card) => (
                 <Card
