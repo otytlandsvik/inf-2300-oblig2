@@ -4,7 +4,7 @@ function Card(props) {
     return (
         <div>
             <span>{props.text}</span>
-            <button onClick={props.onDelete}>Delete</button>
+            <button onClick={() => props.onDelete(props.id)}>Delete</button>
         </div>
     );
 }

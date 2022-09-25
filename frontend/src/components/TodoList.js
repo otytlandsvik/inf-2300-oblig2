@@ -21,8 +21,8 @@ function TodoList(props) {
     function handleDelete(id) {
         /* Filter out card with given id */
         const newCards = cards.filter((c) => c.id != id);
-        /* Set new state hook */
-        setCards({ newCards });
+        /* Set new cards to useState hook */
+        setCards(newCards);
     }
 
     return (
@@ -30,7 +30,12 @@ function TodoList(props) {
             <span>Pending todos: {count}</span>
             <button onClick={addCard}>Add</button>
             {cards.map((card) => (
-                <Card key={card.id} text={card.text} onDelete={handleDelete} />
+                <Card
+                    id={card.id}
+                    key={card.id}
+                    text={card.text}
+                    onDelete={handleDelete}
+                />
             ))}
         </div>
     );
