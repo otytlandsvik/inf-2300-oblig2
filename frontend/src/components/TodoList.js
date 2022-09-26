@@ -1,19 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "./Card.js";
+import axios from "axios";
+
+/* Initialize api */
+const api = axios.create({
+    baseURL: `http://localhost:5000/api/`,
+});
 
 function TodoList(props) {
     /* Todo item count */
-    const [count, setCount] = useState(3);
+    const [count, setCount] = useState(0);
     /* Input text for new card */
     const [input, setInput] = useState("");
     /* List of cards */
-    const [cards, setCards] = useState(() => {
-        return [
-            { id: 0, text: "Do the dishes" },
-            { id: 1, text: "Blow me" },
-            { id: 2, text: "Watch south park" },
-        ];
-    });
+    const [cards, setCards] = useState([]);
+
+    /* Fetch data on mount */
+    useEffect(() => {
+        api.get("/items").then((res) => {
+            console.log(res.data.items);
+            /* Create card components from data */
+            setCards(res.data.items);
+            /* Update card count */
+            setCount(res.data.items.length);
+        });
+    }, []);
 
     /* Add card on button click */
     function addCard() {
@@ -23,8 +34,8 @@ function TodoList(props) {
         setCards((prevCards) => [
             ...prevCards,
             {
-                id: count,
-                text: input,
+                id: cards[cards.length - 1].id + 1,
+                name: input,
             },
         ]);
         /* Empty text input */
@@ -55,7 +66,7 @@ function TodoList(props) {
                 <Card
                     id={card.id}
                     key={card.id}
-                    text={card.text}
+                    name={card.name}
                     onDelete={handleDelete}
                 />
             ))}

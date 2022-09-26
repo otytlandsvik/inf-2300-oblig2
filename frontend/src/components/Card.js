@@ -3,7 +3,7 @@ import React, { useState } from "react";
 function Card(props) {
     return (
         <div>
-            <span>{props.text}</span>
+            <span>{props.name}</span>
             <button onClick={() => props.onDelete(props.id)}>Delete</button>
         </div>
     );
