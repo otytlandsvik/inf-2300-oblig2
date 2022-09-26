@@ -3,7 +3,7 @@ import Card from "./Card.js";
 
 function TodoList(props) {
     /* Todo item count */
-    const [count, setCount] = useState(4);
+    const [count, setCount] = useState(3);
     /* Input text for new card */
     const [input, setInput] = useState();
     /* List of cards */
@@ -15,15 +15,21 @@ function TodoList(props) {
         ];
     });
 
-    /* Update the input useState */
-    function updateInput() {
-        setInput(event.target.value);
-    }
-
     /* Add card on button click */
     function addCard() {
         /* Increment number of cards on list */
         setCount((prevCount) => prevCount + 1);
+        /* Add new card */
+        setCards((prevCards) => [
+            ...prevCards,
+            {
+                id: count,
+                text: input,
+            },
+        ]);
+        /* Empty text input */
+        setInput("");
+        console.log(input);
     }
 
     /* Delete card on button click */
@@ -32,13 +38,19 @@ function TodoList(props) {
         const newCards = cards.filter((c) => c.id != id);
         /* Set new cards to useState hook */
         setCards(newCards);
+        /* Decrement count */
+        setCount((prevCount) => prevCount - 1);
     }
 
     return (
         <div>
             <span>Pending todos: {count}</span>
             <br></br>
-            <input type="text" onChange={updateInput}></input>
+            <input
+                type="text"
+                onChange={(e) => setInput(e.target.value)}
+                value={input}
+            ></input>
             <button onClick={addCard}>Add</button>
             {cards.map((card) => (
                 <Card
