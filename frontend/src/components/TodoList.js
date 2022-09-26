@@ -5,7 +5,7 @@ function TodoList(props) {
     /* Todo item count */
     const [count, setCount] = useState(3);
     /* Input text for new card */
-    const [input, setInput] = useState();
+    const [input, setInput] = useState("");
     /* List of cards */
     const [cards, setCards] = useState(() => {
         return [
@@ -29,7 +29,6 @@ function TodoList(props) {
         ]);
         /* Empty text input */
         setInput("");
-        console.log(input);
     }
 
     /* Delete card on button click */
@@ -48,8 +47,8 @@ function TodoList(props) {
             <br></br>
             <input
                 type="text"
-                onChange={(e) => setInput(e.target.value)}
                 value={input}
+                onChange={(e) => setInput(e.target.value)}
             ></input>
             <button onClick={addCard}>Add</button>
             {cards.map((card) => (
