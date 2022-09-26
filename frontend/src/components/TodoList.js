@@ -17,14 +17,24 @@ function TodoList(props) {
 
     /* Fetch data on mount */
     useEffect(() => {
-        api.get("/items").then((res) => {
-            console.log(res.data.items);
-            /* Create card components from data */
-            setCards(res.data.items);
-            /* Update card count */
-            setCount(res.data.items.length);
+        getData().then((newCards) => {
+            setCount(newCards.length);
         });
     }, []);
+
+    /* Fetch data from REST api */
+    const getData = async () => {
+        const items = await api.get("/items").then(({ data }) => data.items);
+        const newCards = [];
+        for (let i = 0; i < items.length; i++) {
+            const newCard = { id: 0, name: "" };
+            newCard.id = items[i].id;
+            newCard.name = items[i].name;
+            newCards.push(newCard);
+        }
+        setCards(newCards);
+        return newCards;
+    };
 
     /* Add card on button click */
     function addCard() {
