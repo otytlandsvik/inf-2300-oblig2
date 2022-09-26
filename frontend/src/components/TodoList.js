@@ -4,10 +4,10 @@ import axios from "axios";
 
 /* Initialize api */
 const api = axios.create({
-    baseURL: `http://localhost:5000/api/`,
+    baseURL: "http://localhost:5000/api/",
 });
 
-function TodoList(props) {
+function TodoList() {
     /* Todo item count */
     const [count, setCount] = useState(0);
     /* Input text for new card */
@@ -39,8 +39,8 @@ function TodoList(props) {
     };
 
     /* Post data to api */
-    const postData = async (name) => {
-        await api.post("/items/", { name: name }).then((res) => {
+    const handleAdd = async () => {
+        await api.post("/items/", { name: input }).then((res) => {
             const newCard = res.data.item;
             /* Add new card */
             setCards((prevCards) => [
@@ -50,24 +50,19 @@ function TodoList(props) {
                     name: newCard.name,
                 },
             ]);
+            /* Empty text input */
+            setInput("");
         });
     };
 
-    /* Add card on button click */
-    function addCard() {
-        /* Post data to api and add card */
-        postData(input);
-        /* Empty text input */
-        setInput("");
-    }
-
-    /* Delete card on button click */
-    function handleDelete(id) {
-        /* Filter out card with given id */
-        const newCards = cards.filter((c) => c.id !== id);
-        /* Set new cards to useState hook */
-        setCards(newCards);
-    }
+    /* Send delete request to api */
+    const handleDelete = async (id) => {
+        await api.delete(`/items/${id}`).then(() => {
+            /* Filter out deleted card */
+            const newCards = cards.filter((c) => c.id !== id);
+            setCards(newCards);
+        });
+    };
 
     return (
         <div>
@@ -78,7 +73,7 @@ function TodoList(props) {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
             ></input>
-            <button onClick={addCard}>Add</button>
+            <button onClick={handleAdd}>Add</button>
             {cards.map((card) => (
                 <Card
                     id={card.id}
