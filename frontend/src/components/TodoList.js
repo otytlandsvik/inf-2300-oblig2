@@ -27,7 +27,7 @@ function TodoList(props) {
 
     /* Fetch data from REST api */
     const getData = async () => {
-        const items = await api.get("/items").then(({ data }) => data.items);
+        const items = await api.get("/items/").then(({ data }) => data.items);
         const newCards = [];
         for (let i = 0; i < items.length; i++) {
             const newCard = { id: 0, name: "" };
@@ -36,7 +36,6 @@ function TodoList(props) {
             newCards.push(newCard);
         }
         setCards(newCards);
-        // setCount(newCards.length);
     };
 
     /* Post data to api */
@@ -51,24 +50,12 @@ function TodoList(props) {
                     name: newCard.name,
                 },
             ]);
-            console.log(newCard);
-            /* Get updated dataset */
-            // getData();
         });
     };
 
     /* Add card on button click */
     function addCard() {
-        /* Increment number of cards on list */
-        // setCount((prevCount) => prevCount + 1);
-        // /* Add new card */
-        // setCards((prevCards) => [
-        //     ...prevCards,
-        //     {
-        //         id: cards[cards.length - 1].id + 1,
-        //         name: input,
-        //     },
-        // ]);
+        /* Post data to api and add card */
         postData(input);
         /* Empty text input */
         setInput("");
@@ -80,8 +67,6 @@ function TodoList(props) {
         const newCards = cards.filter((c) => c.id !== id);
         /* Set new cards to useState hook */
         setCards(newCards);
-        /* Decrement count */
-        // setCount((prevCount) => prevCount - 1);
     }
 
     return (
