@@ -29,6 +29,7 @@ function TodoList() {
     const getData = async () => {
         const items = await api.get("/items/").then(({ data }) => data.items);
         const newCards = [];
+        /* Populate cards with data received */
         for (let i = 0; i < items.length; i++) {
             const newCard = { id: 0, name: "" };
             newCard.id = items[i].id;
@@ -38,7 +39,7 @@ function TodoList() {
         setCards(newCards);
     };
 
-    /* Post data to api */
+    /* Post data to REST api */
     const handleAdd = async () => {
         await api.post("/items/", { name: input }).then((res) => {
             const newCard = res.data.item;
@@ -55,7 +56,7 @@ function TodoList() {
         });
     };
 
-    /* Send delete request to api */
+    /* Send delete request to REST api */
     const handleDelete = async (id) => {
         await api.delete(`/items/${id}`).then(() => {
             /* Filter out deleted card */
