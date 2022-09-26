@@ -17,10 +17,13 @@ function TodoList(props) {
 
     /* Fetch data on mount */
     useEffect(() => {
-        getData().then((newCards) => {
-            setCount(newCards.length);
-        });
+        getData();
     }, []);
+
+    /* Change count based on cards length */
+    useEffect(() => {
+        setCount(cards.length);
+    }, [cards]);
 
     /* Fetch data from REST api */
     const getData = async () => {
@@ -33,21 +36,40 @@ function TodoList(props) {
             newCards.push(newCard);
         }
         setCards(newCards);
-        return newCards;
+        // setCount(newCards.length);
+    };
+
+    /* Post data to api */
+    const postData = async (name) => {
+        await api.post("/items/", { name: name }).then((res) => {
+            const newCard = res.data.item;
+            /* Add new card */
+            setCards((prevCards) => [
+                ...prevCards,
+                {
+                    id: newCard.id,
+                    name: newCard.name,
+                },
+            ]);
+            console.log(newCard);
+            /* Get updated dataset */
+            // getData();
+        });
     };
 
     /* Add card on button click */
     function addCard() {
         /* Increment number of cards on list */
-        setCount((prevCount) => prevCount + 1);
-        /* Add new card */
-        setCards((prevCards) => [
-            ...prevCards,
-            {
-                id: cards[cards.length - 1].id + 1,
-                name: input,
-            },
-        ]);
+        // setCount((prevCount) => prevCount + 1);
+        // /* Add new card */
+        // setCards((prevCards) => [
+        //     ...prevCards,
+        //     {
+        //         id: cards[cards.length - 1].id + 1,
+        //         name: input,
+        //     },
+        // ]);
+        postData(input);
         /* Empty text input */
         setInput("");
     }
@@ -59,7 +81,7 @@ function TodoList(props) {
         /* Set new cards to useState hook */
         setCards(newCards);
         /* Decrement count */
-        setCount((prevCount) => prevCount - 1);
+        // setCount((prevCount) => prevCount - 1);
     }
 
     return (
