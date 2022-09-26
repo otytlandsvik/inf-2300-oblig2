@@ -34,7 +34,7 @@ function TodoList(props) {
     /* Delete card on button click */
     function handleDelete(id) {
         /* Filter out card with given id */
-        const newCards = cards.filter((c) => c.id != id);
+        const newCards = cards.filter((c) => c.id !== id);
         /* Set new cards to useState hook */
         setCards(newCards);
         /* Decrement count */
