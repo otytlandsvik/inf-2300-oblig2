@@ -65,6 +65,19 @@ function TodoList() {
         });
     };
 
+    /* Send post request to REST api */
+    const handleUpdate = async (id) => {
+        await api.put(`/items/${id}`, { name: input }).then((res) => {
+            /* Update edited card with response data */
+            let newCards = cards;
+            let idx = newCards.findIndex((c) => c.id === id);
+            newCards[idx].name = res.data.item.name;
+            setCards(newCards);
+            /* Empty text input */
+            setInput("");
+        });
+    };
+
     return (
         <div>
             <span>Pending todos: {count}</span>
@@ -81,6 +94,7 @@ function TodoList() {
                     key={card.id}
                     name={card.name}
                     onDelete={handleDelete}
+                    onUpdate={handleUpdate}
                 />
             ))}
         </div>
