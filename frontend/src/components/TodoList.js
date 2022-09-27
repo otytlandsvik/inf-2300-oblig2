@@ -27,20 +27,14 @@ function TodoList() {
 
     /* Fetch data from REST api */
     const getData = async () => {
+        /* Send GET request to api */
         const items = await api.get("/items/").then(({ data }) => data.items);
-        const newCards = [];
-        /* Populate cards with data received */
-        for (let i = 0; i < items.length; i++) {
-            const newCard = { id: 0, name: "" };
-            newCard.id = items[i].id;
-            newCard.name = items[i].name;
-            newCards.push(newCard);
-        }
-        setCards(newCards);
+        setCards(items);
     };
 
-    /* Post data to REST api */
+    /* Add item to todolist */
     const handleAdd = async () => {
+        /* Send POST request to api */
         await api.post("/items/", { name: input }).then((res) => {
             const newCard = res.data.item;
             /* Add new card */
@@ -56,8 +50,9 @@ function TodoList() {
         });
     };
 
-    /* Send delete request to REST api */
+    /* Remove item from todolist */
     const handleDelete = async (id) => {
+        /* Send DELETE request to api */
         await api.delete(`/items/${id}`).then(() => {
             /* Filter out deleted card */
             const newCards = cards.filter((c) => c.id !== id);
@@ -65,8 +60,9 @@ function TodoList() {
         });
     };
 
-    /* Send post request to REST api */
+    /* Update name of todolist item */
     const handleUpdate = async (id) => {
+        /* Send PUT request to api */
         await api.put(`/items/${id}`, { name: input }).then((res) => {
             /* Update edited card with response data */
             let newCards = cards;
@@ -75,6 +71,20 @@ function TodoList() {
             setCards(newCards);
             /* Empty text input */
             setInput("");
+        });
+    };
+
+    /* Update status of todolist item */
+    const handleUpdateStatus = async (id) => {
+        /* Get status of card */
+        const idx = cards.findIndex((c) => c.id === id);
+        const newStatus = !cards[idx].done;
+        /* Send PUT request to api */
+        await api.put(`/items/${id}`, { done: newStatus }).then((res) => {
+            /* Update edited card with response data */
+            let newCards = cards;
+            newCards[idx].done = res.data.item.done;
+            setCards(newCards);
         });
     };
 
@@ -93,8 +103,10 @@ function TodoList() {
                     id={card.id}
                     key={card.id}
                     name={card.name}
+                    done={card.done}
                     onDelete={handleDelete}
                     onUpdate={handleUpdate}
+                    onDone={handleUpdateStatus}
                 />
             ))}
         </div>
