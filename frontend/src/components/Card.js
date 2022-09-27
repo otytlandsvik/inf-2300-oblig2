@@ -4,7 +4,7 @@ function Card(props) {
     const [status, setStatus] = useState("");
 
     useEffect(() => {
-        console.log("rendered card");
+        // console.log("rendered card");
         let newStatus = props.done === true ? "Done" : "Not done";
         setStatus(newStatus);
     }, [props.done]);

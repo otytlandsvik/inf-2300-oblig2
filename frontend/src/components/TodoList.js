@@ -28,8 +28,9 @@ function TodoList() {
     /* Fetch data from REST api */
     const getData = async () => {
         /* Send GET request to api */
-        const items = await api.get("/items/").then(({ data }) => data.items);
-        setCards(items);
+        await api.get("/items/").then(({ data }) => {
+            setCards(data.items);
+        });
     };
 
     /* Add item to todolist */
@@ -65,9 +66,12 @@ function TodoList() {
         /* Send PUT request to api */
         await api.put(`/items/${id}`, { name: input }).then((res) => {
             /* Update edited card with response data */
-            let newCards = cards;
-            let idx = newCards.findIndex((c) => c.id === id);
-            newCards[idx].name = res.data.item.name;
+            const newCards = cards.map((c) => {
+                if (c.id === id) {
+                    return { ...c, name: res.data.item.name };
+                }
+                return c;
+            });
             setCards(newCards);
             /* Empty text input */
             setInput("");
@@ -81,9 +85,13 @@ function TodoList() {
         const newStatus = !cards[idx].done;
         /* Send PUT request to api */
         await api.put(`/items/${id}`, { done: newStatus }).then((res) => {
-            /* Update edited card with response data */
-            let newCards = cards;
-            newCards[idx].done = res.data.item.done;
+            /* Update card with given id */
+            const newCards = cards.map((c) => {
+                if (c.id === id) {
+                    return { ...c, done: res.data.item.done };
+                }
+                return c;
+            });
             setCards(newCards);
         });
     };
