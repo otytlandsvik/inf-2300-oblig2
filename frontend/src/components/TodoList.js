@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ToDoCard from "./ToDoCard.js";
 import axios from "axios";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Badge from "react-bootstrap/Badge";
+import Stack from "react-bootstrap/Stack";
 
 /* Initialize api */
 const api = axios.create({
@@ -20,9 +24,9 @@ function TodoList() {
         getData();
     }, []);
 
-    /* Change count based on cards length */
+    /* Change count based on not done cards*/
     useEffect(() => {
-        setCount(cards.length);
+        setCount(cards.filter((c) => c.done === false).length);
     }, [cards]);
 
     /* Fetch data from REST api */
@@ -35,6 +39,10 @@ function TodoList() {
 
     /* Add item to todolist */
     const handleAdd = async () => {
+        /* Do not add empty todo */
+        if (!input) {
+            return;
+        }
         /* Send POST request to api */
         await api.post("/items/", { name: input }).then((res) => {
             const newCard = res.data.item;
@@ -63,6 +71,10 @@ function TodoList() {
 
     /* Update name of todolist item */
     const handleUpdate = async (id) => {
+        /* Do not add empty todo */
+        if (!input) {
+            return;
+        }
         /* Send PUT request to api */
         await api.put(`/items/${id}`, { name: input }).then((res) => {
             /* Update edited card with response data */
@@ -97,15 +109,22 @@ function TodoList() {
     };
 
     return (
-        <div>
-            <span>Pending todos: {count}</span>
-            <br></br>
-            <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-            ></input>
-            <button onClick={handleAdd}>Add</button>
+        <div className="m-2">
+            <h4 style={{ color: "white" }}>
+                Pending todos: <Badge>{count}</Badge>
+            </h4>
+
+            <Stack direction="horizontal" gap={3}>
+                <Form>
+                    <Form.Control
+                        type="text"
+                        value={input}
+                        placeholder="Type your new todo..."
+                        onChange={(e) => setInput(e.target.value)}
+                    ></Form.Control>
+                </Form>
+                <Button onClick={handleAdd}>Add</Button>
+            </Stack>
             {cards.map((card) => (
                 <ToDoCard
                     id={card.id}
