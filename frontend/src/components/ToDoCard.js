@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-function Card(props) {
+function ToDoCard(props) {
     const [status, setStatus] = useState("");
 
     useEffect(() => {
-        // console.log("rendered card");
         let newStatus = props.done === true ? "Done" : "Not done";
         setStatus(newStatus);
     }, [props.done]);
@@ -19,4 +18,4 @@ function Card(props) {
     );
 }
 
-export default Card;
+export default ToDoCard;

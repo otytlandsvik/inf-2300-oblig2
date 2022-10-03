@@ -1,5 +1,4 @@
 import TodoList from "./components/TodoList";
-import Axios from "axios";
 
 function App() {
     return (

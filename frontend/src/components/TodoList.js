@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Card from "./Card.js";
+import ToDoCard from "./ToDoCard.js";
 import axios from "axios";
 
 /* Initialize api */
@@ -107,7 +107,7 @@ function TodoList() {
             ></input>
             <button onClick={handleAdd}>Add</button>
             {cards.map((card) => (
-                <Card
+                <ToDoCard
                     id={card.id}
                     key={card.id}
                     name={card.name}
