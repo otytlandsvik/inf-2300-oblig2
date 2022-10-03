@@ -1,21 +1,38 @@
 import React, { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Card from "react-bootstrap/Card";
 
 function ToDoCard(props) {
-    const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("");
 
-    useEffect(() => {
-        let newStatus = props.done === true ? "Done" : "Not done";
-        setStatus(newStatus);
-    }, [props.done]);
+  useEffect(() => {
+    let newStatus = props.done ? "Done" : "Not done";
+    setStatus(newStatus);
+  }, [props.done]);
 
-    return (
-        <div>
-            <span>{props.name}</span>
-            <button onClick={() => props.onDelete(props.id)}>Delete</button>
-            <button onClick={() => props.onUpdate(props.id)}>Update</button>
-            <button onClick={() => props.onDone(props.id)}>{status}</button>
-        </div>
-    );
+  return (
+    <Card
+      bg="dark"
+      text="white"
+      border={props.done ? "success" : "danger"}
+      style={{ width: "18rem" }}
+      className="m-2 p-2"
+    >
+      <Card.Title>{props.name}</Card.Title>
+      <ButtonGroup>
+        <Button variant="danger" onClick={() => props.onDelete(props.id)}>
+          Delete
+        </Button>
+        <Button variant="primary" onClick={() => props.onUpdate(props.id)}>
+          Update
+        </Button>
+        <Button variant="primary" onClick={() => props.onDone(props.id)}>
+          {status}
+        </Button>
+      </ButtonGroup>
+    </Card>
+  );
 }
 
 export default ToDoCard;
