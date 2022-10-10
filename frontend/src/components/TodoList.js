@@ -34,6 +34,7 @@ function TodoList() {
         setErrMsg("");
     }, [cards]);
 
+    /* Handle error from Axios API request */
     function catchAPIError(err) {
         console.log(err);
         if (err.code === "ERR_NETWORK") {
@@ -91,18 +92,31 @@ function TodoList() {
     };
 
     /* Remove item from todolist */
-    const handleDelete = async (id) => {
+    const deleteCard = async (id) => {
         /* Send DELETE request to api */
-        await api
-            .delete(`/items/${id}`)
-            .then(() => {
-                /* Filter out deleted card */
-                const newCards = cards.filter((c) => c.id !== id);
-                setCards(newCards);
-            })
-            .catch((err) => {
-                catchAPIError(err);
-            });
+        await api.delete(`/items/${id}`).catch((err) => {
+            catchAPIError(err);
+        });
+    };
+
+    /* Remove card */
+    const handleDelete = async (id) => {
+        /* Delete card through API */
+        await deleteCard(id).then(() => {
+            /* Filter out deleted card */
+            const newCards = cards.filter((c) => c.id !== id);
+            setCards(newCards);
+        });
+    };
+
+    /* Remove all todos */
+    const handleDeleteAll = async () => {
+        /* Loop through cards and delete them */
+        for (const card of cards) {
+            await deleteCard(card.id);
+        }
+        /* Empty card state */
+        setCards([]);
     };
 
     /* Update name of todolist item */
@@ -156,9 +170,14 @@ function TodoList() {
 
     return (
         <div className="m-2">
-            <h4 style={{ color: "white" }}>
-                Pending todos: <Badge>{count}</Badge>
-            </h4>
+            <Stack direction="horizontal" gap={3}>
+                <h4 style={{ color: "white" }}>
+                    Pending todos: <Badge>{count}</Badge>
+                </h4>
+                <Button variant="danger" size="sm" onClick={handleDeleteAll}>
+                    Clear all
+                </Button>
+            </Stack>
 
             {errMsg && (
                 <Alert variant="danger" style={{ width: "18rem" }}>
