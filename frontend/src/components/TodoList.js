@@ -115,8 +115,8 @@ function TodoList() {
         for (const card of cards) {
             await deleteCard(card.id);
         }
-        /* Empty card state */
-        setCards([]);
+        /* Get cards from API */
+        getData();
     };
 
     /* Update name of todolist item */
