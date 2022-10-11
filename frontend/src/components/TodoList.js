@@ -35,18 +35,14 @@ function TodoList() {
     }, [cards]);
 
     /* Handle error from Axios API request */
-    function catchAPIError(err) {
-        console.log(err);
+    function handleAPIErr(err) {
         if (err.code === "ERR_NETWORK") {
             /* No response */
-            console.log("No response from server");
             setErrMsg("No response from server!");
         } else if (err.response) {
             /* Server returned error response */
-            console.log(err.response.status + err.response.statusText);
             setErrMsg(err.response.status + " " + err.response.statusText);
         } else {
-            console.log("Unknown error");
             setErrMsg("Unknown error!");
         }
     }
@@ -60,7 +56,7 @@ function TodoList() {
                 setCards(data.items);
             })
             .catch((err) => {
-                catchAPIError(err);
+                handleAPIErr(err);
             });
     };
 
@@ -87,7 +83,7 @@ function TodoList() {
                 setInput("");
             })
             .catch((err) => {
-                catchAPIError(err);
+                handleAPIErr(err);
             });
     };
 
@@ -95,7 +91,7 @@ function TodoList() {
     const deleteCard = async (id) => {
         /* Send DELETE request to api */
         await api.delete(`/items/${id}`).catch((err) => {
-            catchAPIError(err);
+            handleAPIErr(err);
         });
     };
 
@@ -141,7 +137,7 @@ function TodoList() {
                 setInput("");
             })
             .catch((err) => {
-                catchAPIError(err);
+                handleAPIErr(err);
             });
     };
 
@@ -164,7 +160,7 @@ function TodoList() {
                 setCards(newCards);
             })
             .catch((err) => {
-                catchAPIError(err);
+                handleAPIErr(err);
             });
     };
 
